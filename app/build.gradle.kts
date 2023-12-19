@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.productflavors"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.productflavors"
@@ -21,12 +21,36 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            isDebuggable = true
             isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+    flavorDimensions += "version"
+    productFlavors{
+        create("stage"){
+            dimension = "version"
+            versionName = "1.0"
+            versionCode = 1
+            resValue("string","app_name","ProductFlavor Stage")
+            buildConfigField("String", "API_URL", "\"https://stageUrl.com\"")
+        }
+        create("prod"){
+            dimension = "version"
+            versionName = "1.0"
+            versionCode = 1
+            resValue("string","app_name","ProductFlavor")
+            buildConfigField("String", "API_URL", "\"https://prodUrl.com\"")
         }
     }
     compileOptions {
@@ -38,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
