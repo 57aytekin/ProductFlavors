@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.productflavors"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.productflavors"
@@ -21,12 +21,36 @@ android {
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+            buildConfigField("String","BaseUrl","\"test.api.com\"")
+        }
         release {
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String","BaseUrl","\"prod.api.com\"")
+        }
+    }
+    flavorDimensions += "store"
+    productFlavors {
+        create("playStore"){
+            dimension  = "store"
+            applicationIdSuffix = ".gms"
+            versionNameSuffix = "-gms"
+            minSdk = 21
+            buildConfigField("String","STORE_TYPE","\"Google Play Store\"")
+        }
+        create("appGallery"){
+            dimension = "store"
+            applicationIdSuffix = ".hms"
+            versionNameSuffix = "-hms"
+            minSdk = 23
+            buildConfigField("String","STORE_TYPE","\"Huawei App Gallery\"")
         }
     }
     compileOptions {
@@ -38,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
